@@ -1,0 +1,14 @@
+server:
+  port: 8182
+
+spring:
+  application:
+    name: projectDB #client will be registered under this name with eureka-server
+  data:
+    mongodb:
+#      host:     ${MONGODB_HOST:localhost}
+      host:     localhost
+#      port:     ${MONGODB_PORT:27017}
+      port:     27017
+#      database: ${MONGODB_DBNAME:invisible}
+      database: invisible
