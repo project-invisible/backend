@@ -1,6 +1,7 @@
 package invivible.database.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import invivible.database.models.user.User;
@@ -14,6 +15,6 @@ import invivible.database.models.user.User;
  * <p>
  * <p/>
  */
-@Service
+@Repository
 public interface UserRepository extends MongoRepository<User, Long> {
 }

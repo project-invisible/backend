@@ -13,6 +13,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import java.util.Date;
 import java.util.List;
 
@@ -35,12 +38,18 @@ public class User {
 
   @Id
   private long id;
+  @NotNull
+  @NotEmpty
   private String email;
+  @NotNull
+  @NotEmpty
   private String username;
   private List<Rating> ratings;
   private boolean anonymous;
   private Role role;
   private Date creation_date;
+  @NotNull
+  @NotEmpty
   private String password;
   private Contact contact;
   private Status status;
