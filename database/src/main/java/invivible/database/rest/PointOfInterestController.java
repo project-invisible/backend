@@ -1,6 +1,7 @@
 package invivible.database.rest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,29 +38,29 @@ public class PointOfInterestController {
     this.pointOfInterestService = pointOfInterestService;
   }
 
-  @GetMapping()
+  @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PointOfInterest>> getAllPois() {
     return new ResponseEntity<>(pointOfInterestService.getAllPois(), HttpStatus.OK);
   }
 
-  @GetMapping("/{poiID}")
+  @GetMapping(value = "/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<PointOfInterest> getPoi(@PathVariable Long poiID) {
     Optional<PointOfInterest> poi = pointOfInterestService.getPoi(poiID);
     return poi.map(pointOfInterest -> new ResponseEntity<>(pointOfInterest, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 
-  @PostMapping("")
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Long> postPoi(@RequestBody PointOfInterest poi) {
     Long poiID = pointOfInterestService.postPoi(poi);
     return new ResponseEntity<>(poiID, HttpStatus.OK);
   }
 
-  @PostMapping("/search")
+  @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PointOfInterest>> searchForPoi(@RequestBody String query) {
     return new ResponseEntity<>(pointOfInterestService.searchForPoi(query), HttpStatus.OK);
   }
 
-  @PostMapping("/importAll")
+  @PostMapping(value = "/importAll", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<String> importPois(@RequestBody List<PoiDTO> poiDTOS) {
     return new ResponseEntity<>(pointOfInterestService.importAll(poiDTOS), HttpStatus.OK);
   }

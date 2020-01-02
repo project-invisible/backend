@@ -1,5 +1,8 @@
 package invivible.database.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +26,7 @@ import invivible.database.service.AuthenticationService;
 @RequestMapping("/authenticate")
 public class AuthenticationController {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
   private final AuthenticationService authenticationService;
 
@@ -30,8 +34,9 @@ public class AuthenticationController {
     this.authenticationService = authenticationService;
   }
 
-  @PostMapping("/register")
+  @PostMapping(value = "/register")
   public ResponseEntity<String> registerUserInDB(@RequestBody User user) {
+    LOGGER.info("Registration request from: " + user.getEmail());
     return this.authenticationService.registerUserInDB(user);
   }
 

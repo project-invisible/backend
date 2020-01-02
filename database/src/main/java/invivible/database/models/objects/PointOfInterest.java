@@ -1,6 +1,7 @@
 package invivible.database.models.objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import invivible.database.models.helper.Coordinates;
@@ -27,6 +28,7 @@ public class PointOfInterest {
 
   @Id
   private Long id;
+  @Indexed
   private String name;
   private String street;
   private String postal;
