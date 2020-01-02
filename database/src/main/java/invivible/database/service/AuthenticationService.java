@@ -2,6 +2,7 @@ package invivible.database.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import invivible.database.models.user.User;
@@ -21,16 +22,33 @@ import java.util.Optional;
 @Service
 public class AuthenticationService {
 
-  private final UserRepository userRepository;
+  private final String user_sequence = "user_sequence";
 
-  public AuthenticationService(UserRepository userRepository) {
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
+  private final SequenceGeneratorService sequenceGeneratorService;
+
+  public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, SequenceGeneratorService sequenceGeneratorService) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.sequenceGeneratorService = sequenceGeneratorService;
   }
 
   public ResponseEntity<String> registerUserInDB(User user) {
-    Optional<User> byId = this.userRepository.findById(user.getId());
-    return byId.map(value -> new ResponseEntity<>("User mit der Id: " + value.getId() + "already registered.", HttpStatus.BAD_REQUEST))
-        .orElseGet(() -> new ResponseEntity<>("User mit der Id: " + this.userRepository.save(user).getId() + " registered.", HttpStatus.ACCEPTED));
+    Optional<User> byId = this.userRepository.findByEmail(user.getEmail());
+    if(!byId.isPresent()){
+      //    set user anonymous if no username chosen
+      if(user.getUsername() == null || user.getUsername().equals("")){
+        user.setAnonymous(true);
+      }
+//    encrypt password
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+//    generate ID
+      user.setId(sequenceGeneratorService.generateId(user_sequence));
+      return new ResponseEntity<>("User mit der Id: " + this.userRepository.save(user).getId() + " registered.", HttpStatus.ACCEPTED);
+    } else {
+      return new ResponseEntity<>("User mit der Email: " + user.getEmail() + "already registered.", HttpStatus.BAD_REQUEST);
+    }
   }
 
   public ResponseEntity<String> authenticateUser(User user) {
@@ -49,6 +67,6 @@ public class AuthenticationService {
   }
 
   private boolean comparePasswords(String passwordDto, String passwordDB) {
-    return true;
+    return passwordEncoder.matches(passwordDto, passwordDB);
   }
 }

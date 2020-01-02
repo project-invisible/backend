@@ -1,6 +1,7 @@
 package invivible.database.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
 
 import invivible.database.models.objects.Feedback;
 import invivible.database.repository.FeedbackRepository;
@@ -8,7 +9,7 @@ import invivible.database.repository.FeedbackRepository;
 import java.util.Optional;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -28,5 +29,10 @@ public class FeedbackService {
   public long postFeedback(Feedback feedback){
     Optional<Feedback> feedbackFromDB = feedbackRepository.findById(feedback.getId());
     return feedbackRepository.save(feedback).getId();
+  }
+
+  public Feedback getFeedback(Long feedbackID) {
+    Optional<Feedback> byId = feedbackRepository.findById(feedbackID);
+    return byId.orElse(null);
   }
 }

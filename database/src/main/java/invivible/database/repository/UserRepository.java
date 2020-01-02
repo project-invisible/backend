@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import invivible.database.models.user.User;
 
+import java.util.Optional;
+
 /**
  * Project:        ProjektPool
  * <p>
@@ -17,4 +19,6 @@ import invivible.database.models.user.User;
  */
 @Repository
 public interface UserRepository extends MongoRepository<User, Long> {
+
+  Optional<User> findByEmail(String email);
 }

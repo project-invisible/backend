@@ -26,15 +26,16 @@ import lombok.NoArgsConstructor;
 public class PointOfInterest {
 
   @Id
-  private long id;
+  private Long id;
   private String name;
   private String street;
   private String postal;
   private String city;
   private String description;
   private String email;
+  private String website;
   private Coordinates coordinates;
-  private Float overall_rating;
+  private Float overallRating;
 
 
 }

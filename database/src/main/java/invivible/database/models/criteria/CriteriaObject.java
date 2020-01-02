@@ -23,6 +23,6 @@ import lombok.NoArgsConstructor;
 public class CriteriaObject {
 
   private String name;
-  private long criteria_rating;
-  private String criteria_text;
+  private long criteriaRating;
+  private String criteriaText;
 }

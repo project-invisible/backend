@@ -29,8 +29,8 @@ public class UserReport {
 
   @Id
   private long id;
-  private User reporting_user;
-  private User reported_user;
-  private Date report_date;
+  private User reportingUser;
+  private User reportedUser;
+  private Date reportDate;
   private boolean solved;
 }

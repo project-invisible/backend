@@ -1,5 +1,6 @@
 package invivible.database.models.objects;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,11 +31,11 @@ import java.util.Date;
 public class Entry {
 
   @Id
-  private long id;
+  private Long id;
   private String name;
   private String description;
   private Coordinates coords;
-  private Date creation_date;
+  private Date creationDate;
   private User user;
-//  todo image
+  private Binary image;
 }

@@ -29,7 +29,7 @@ public class Criteria {
   @Id
   private long id;
   private String name;
-  private Float overall_rating;
-  private List<CriteriaObject> criteria_ratings;
+  private Float overallRating;
+  private List<CriteriaObject> criteriaRatings;
 
 }

@@ -29,8 +29,8 @@ public class RatingReport {
 
   @Id
   private long id;
-  private User reporting_user;
+  private User reportingUser;
   private Rating rating;
-  private Date report_date;
+  private Date reportDate;
   private boolean solved;
 }

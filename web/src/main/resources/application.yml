@@ -1,10 +1,22 @@
 spring:
   application:
-    name: stock-service
+    name: web
+  cloud:
+    gateway:
+      routes:
+        - id: auth
+          uri: lb://AUTH
+          predicates:
+            path: /auth/**
+#            filters:
+        - id: database
+          uri: lb://PROJECTDB
+          predicates:
+            path: /database/**
+#            filters:
 
 server:
   port: 8083
-
 
 eureka:
   client:

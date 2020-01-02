@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
  * Project:        ProjektPool
  * <p>
@@ -20,7 +23,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDto {
 
+  @NotEmpty
+  @NotNull
   private String email;
   private String username;
+  @NotEmpty
+  @NotNull
   private String password;
 }

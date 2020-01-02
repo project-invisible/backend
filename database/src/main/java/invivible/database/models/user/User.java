@@ -1,8 +1,10 @@
 package invivible.database.models.user;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import invivible.database.helper.ValidEmail;
 import invivible.database.models.enums.Role;
 import invivible.database.models.enums.Status;
 import invivible.database.models.helper.Contact;
@@ -40,6 +42,7 @@ public class User {
   private long id;
   @NotNull
   @NotEmpty
+  @ValidEmail
   private String email;
   @NotNull
   @NotEmpty
@@ -53,5 +56,5 @@ public class User {
   private String password;
   private Contact contact;
   private Status status;
-//  Todo image
+  private Binary image;
 }

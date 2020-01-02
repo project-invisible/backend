@@ -2,6 +2,7 @@ package invivible.auth.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,6 +21,7 @@ import invivible.auth.models.UserDto;
 public class AuthenticationService {
 
   private RestTemplate restTemplate;
+
 
   public AuthenticationService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;

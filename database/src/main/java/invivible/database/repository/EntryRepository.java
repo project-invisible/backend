@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import invivible.database.models.objects.Entry;
 import invivible.database.models.user.User;
 
+import java.util.List;
+
 /**
  * Project:        ProjektPool
  * <p>
@@ -17,4 +19,6 @@ import invivible.database.models.user.User;
  */
 @Service
 public interface EntryRepository extends MongoRepository<Entry, Long> {
+
+  List<Entry> findByNameLike(String name);
 }

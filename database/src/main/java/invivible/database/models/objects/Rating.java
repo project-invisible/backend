@@ -31,12 +31,13 @@ import java.util.List;
 public class Rating {
 
   @Id
-  private long id;
+  private Long id;
   private User user;
   private PointOfInterest poi;
-  private Float overall_rating;
-  private List<Criteria> criteria_ratings;
-  private Date creation_date;
-  private Date last_updated;
+  private Entry entry;
+  private Float overallRating;
+  private List<Criteria> criteriaRatings;
+  private Date creationDate;
+  private Date lastUpdated;
 
 }
