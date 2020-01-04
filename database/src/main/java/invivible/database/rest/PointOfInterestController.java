@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import invivible.database.models.objects.PoiDTO;
@@ -14,6 +15,7 @@ import invivible.database.models.objects.PointOfInterest;
 import invivible.database.service.PointOfInterestService;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,7 @@ public class PointOfInterestController {
     this.pointOfInterestService = pointOfInterestService;
   }
 
-  @GetMapping()
+  @GetMapping(produces = MediaType.APPLICATION_JSON)
   public ResponseEntity<List<PointOfInterest>> getAllPois() {
     return new ResponseEntity<>(pointOfInterestService.getAllPois(), HttpStatus.OK);
   }
@@ -54,8 +56,8 @@ public class PointOfInterestController {
     return new ResponseEntity<>(poiID, HttpStatus.OK);
   }
 
-  @PostMapping("/search")
-  public ResponseEntity<List<PointOfInterest>> searchForPoi(@RequestBody String query) {
+  @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON)
+  public ResponseEntity<List<PointOfInterest>> searchForPoi(@RequestParam String query) {
     return new ResponseEntity<>(pointOfInterestService.searchForPoi(query), HttpStatus.OK);
   }
 
