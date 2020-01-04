@@ -8,7 +8,11 @@ import invivible.database.models.objects.PointOfInterest;
 import invivible.database.repository.PointOfInterestRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -52,6 +56,7 @@ public class PointOfInterestService {
 
   public String importAll(List<PoiDTO> poiDTOS) {
     List<PointOfInterest> collect = poiDTOS.stream()
+        .filter( distinctByKey(PoiDTO::getUniversityLabel))
         .map(poiDTO -> new PointOfInterest(
             sequenceGeneratorService.generateId(POI_SEQUENCE),
             poiDTO.getUniversityLabel(), null, null, null,
@@ -67,5 +72,11 @@ public class PointOfInterestService {
         Float.parseFloat(point.substring(point.indexOf("(")+1, point.indexOf(" "))),
         Float.parseFloat(point.substring(point.indexOf(" "), point.indexOf(")")))
     );
+  }
+
+  private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor)
+  {
+    Map<Object, Boolean> map = new ConcurrentHashMap<>();
+    return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
 }

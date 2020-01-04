@@ -39,7 +39,7 @@ import java.util.List;
 public class User {
 
   @Id
-  private long id;
+  private Long id;
   @NotNull
   @NotEmpty
   @ValidEmail

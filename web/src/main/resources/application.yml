@@ -5,14 +5,14 @@ spring:
     gateway:
       routes:
         - id: auth
-          uri: lb://AUTH
+          uri: lb://auth
           predicates:
-            path: /auth/**
+            - Path=/auth/**
 #            filters:
         - id: database
-          uri: lb://PROJECTDB
+          uri: lb://projectDB
           predicates:
-            path: /database/**
+            - Path=/database/**
 #            filters:
 
 server:

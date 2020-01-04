@@ -1,5 +1,7 @@
 package invivible.database.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,8 @@ import java.util.Optional;
  */
 @Service
 public class AuthenticationService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
   private final String user_sequence = "user_sequence";
 
@@ -45,9 +49,10 @@ public class AuthenticationService {
       user.setPassword(passwordEncoder.encode(user.getPassword()));
 //    generate ID
       user.setId(sequenceGeneratorService.generateId(user_sequence));
-      return new ResponseEntity<>("User mit der Id: " + this.userRepository.save(user).getId() + " registered.", HttpStatus.ACCEPTED);
+      return new ResponseEntity<>(this.userRepository.save(user).getId().toString(), HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("User mit der Email: " + user.getEmail() + "already registered.", HttpStatus.BAD_REQUEST);
+      LOGGER.warn("User with email: " + user.getEmail() + " already registered.");
+      return new ResponseEntity<>("Email already registered.", HttpStatus.BAD_REQUEST);
     }
   }
 
