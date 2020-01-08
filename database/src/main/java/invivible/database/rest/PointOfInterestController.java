@@ -16,7 +16,6 @@ import invivible.database.models.objects.PointOfInterest;
 import invivible.database.service.PointOfInterestService;
 
 import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
 
 import java.util.List;
 import java.util.Optional;
