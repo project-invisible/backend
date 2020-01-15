@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -28,7 +28,6 @@ public class PointOfInterest {
 
   @Id
   private Long id;
-  @Indexed
   private String name;
   private String street;
   private String postal;

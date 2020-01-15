@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>

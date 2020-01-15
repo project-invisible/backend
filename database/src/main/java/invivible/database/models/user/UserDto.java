@@ -1,4 +1,4 @@
-package invivible.auth.models;
+package invivible.database.models.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +23,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class UserDto {
 
+  @NotNull
+  @NotEmpty
+  private Long id;
   @NotEmpty
   @NotNull
   private String email;

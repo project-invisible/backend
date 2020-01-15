@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -44,10 +44,8 @@ public class User {
   @NotEmpty
   @ValidEmail
   private String email;
-  @NotNull
-  @NotEmpty
   private String username;
-  private List<Rating> ratings;
+//  private List<Rating> ratings;
   private boolean anonymous;
   private Role role;
   private Date creation_date;

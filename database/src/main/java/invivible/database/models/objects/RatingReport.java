@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -28,7 +28,7 @@ import java.util.Date;
 public class RatingReport {
 
   @Id
-  private long id;
+  private Long id;
   private User reportingUser;
   private Rating rating;
   private Date reportDate;

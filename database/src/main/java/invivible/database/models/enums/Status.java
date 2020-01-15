@@ -1,7 +1,7 @@
 package invivible.database.models.enums;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>

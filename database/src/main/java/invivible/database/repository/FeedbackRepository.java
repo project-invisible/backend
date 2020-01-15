@@ -7,7 +7,7 @@ import invivible.database.models.objects.Feedback;
 import invivible.database.models.user.User;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>

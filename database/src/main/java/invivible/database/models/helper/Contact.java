@@ -1,9 +1,14 @@
 package invivible.database.models.helper;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -11,6 +16,10 @@ import java.util.List;
  * <p>
  * <p/>
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Contact {
 
   private String email;

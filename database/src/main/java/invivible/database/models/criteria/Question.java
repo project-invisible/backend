@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
- * Creation date:  11.12.2019
+ * Creation date:  15.01.2020
  * <p>
  * <p/>
  */
@@ -23,13 +23,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "criteria")
-public class Criteria {
+@Document(collection = "questions")
+public class Question {
 
   @Id
-  private long id;
-  private String name;
-  private Float overallRating;
-  private List<CriteriaObject> criteriaRatings;
-
+  private Long id;
+  private String text;
+  private Category category;
+  private SubCategory subCategory;
+  private Boolean hasCheckbox;
+  private List<Integer> followUpQuestion;
 }

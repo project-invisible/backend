@@ -1,4 +1,4 @@
-package invivible.database.models.user;
+package invivible.database.models.enums;
 
 /**
  * Project:        In_Visible
@@ -9,6 +9,9 @@ package invivible.database.models.user;
  * <p>
  * <p/>
  */
-//Maybe not needed
-public class Admin {
+public enum RatingOptions {
+  YES,
+  FALSE,
+  UNDECIDED
 }
+

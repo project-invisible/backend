@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class Feedback {
 
   @Id
-  private long id;
+  private Long id;
   private User user;
   private User editor;
   private String message;

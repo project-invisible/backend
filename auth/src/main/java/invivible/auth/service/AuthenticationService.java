@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import invivible.auth.models.UserDto;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>

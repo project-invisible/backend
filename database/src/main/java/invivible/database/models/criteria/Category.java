@@ -1,16 +1,13 @@
-package invivible.database.models.objects;
+package invivible.database.models.criteria;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import invivible.database.models.criteria.CategorieRating;
-import invivible.database.models.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,23 +19,17 @@ import java.util.List;
  * <p>
  * <p/>
  */
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "rating")
-public class Rating {
+@Document(collection = "categories")
+public class Category {
 
   @Id
   private Long id;
-  private User user;
-  private PointOfInterest poi;
-//  private Entry entry;
+  private String name;
 //  private Float overallRating;
-  private String generalComment;
-  private List<CategorieRating> categorieRatings;
-  private Date creationDate;
-  private Date lastUpdated;
+//  private List<CriteriaObject> criteriaRatings;
 
 }

@@ -13,7 +13,7 @@ import invivible.auth.models.UserDto;
 import invivible.auth.service.AuthenticationService;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>

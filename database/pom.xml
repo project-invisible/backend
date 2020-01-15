@@ -91,6 +91,11 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
+		<dependency>
+			<groupId>invivible</groupId>
+			<artifactId>tokenApp</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
     </dependencies>
 
 	<build>

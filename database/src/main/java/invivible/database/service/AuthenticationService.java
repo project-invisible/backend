@@ -7,13 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import invivible.database.models.enums.Role;
+import invivible.database.models.enums.Status;
+import invivible.database.models.helper.Contact;
 import invivible.database.models.user.User;
+import invivible.database.models.user.UserDto;
 import invivible.database.repository.UserRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -38,25 +43,32 @@ public class AuthenticationService {
     this.sequenceGeneratorService = sequenceGeneratorService;
   }
 
-  public ResponseEntity<String> registerUserInDB(User user) {
+  public ResponseEntity<String> registerUserInDB(UserDto user) {
     Optional<User> byId = this.userRepository.findByEmail(user.getEmail());
     if(!byId.isPresent()){
+      User newUser =
+          new User(sequenceGeneratorService.generateId(user_sequence),
+              user.getEmail(),
+              user.getUsername(),
+              false,
+              Role.USER,
+              new Date(),
+              passwordEncoder.encode(user.getPassword()),
+              new Contact(null, null, 0),
+              Status.ACTIVE,
+              null);
       //    set user anonymous if no username chosen
       if(user.getUsername() == null || user.getUsername().equals("")){
-        user.setAnonymous(true);
+        newUser.setAnonymous(true);
       }
-//    encrypt password
-      user.setPassword(passwordEncoder.encode(user.getPassword()));
-//    generate ID
-      user.setId(sequenceGeneratorService.generateId(user_sequence));
-      return new ResponseEntity<>(this.userRepository.save(user).getId().toString(), HttpStatus.OK);
+      return new ResponseEntity<>(this.userRepository.save(newUser).getId().toString(), HttpStatus.OK);
     } else {
       LOGGER.warn("User with email: " + user.getEmail() + " already registered.");
       return new ResponseEntity<>("Email already registered.", HttpStatus.BAD_REQUEST);
     }
   }
 
-  public ResponseEntity<String> authenticateUser(User user) {
+  public ResponseEntity<String> authenticateUser(UserDto user) {
     Optional<User> byId = this.userRepository.findById(user.getId());
     if(byId.isPresent()) {
 //      compare passwords --> authenticate

@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: projectDB #client will be registered under this name with eureka-server
+    name: database #client will be registered under this name with eureka-server
   data:
     mongodb:
 #      host:     ${MONGODB_HOST:localhost}

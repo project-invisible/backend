@@ -11,7 +11,7 @@ import invivible.database.models.user.User;
 import java.util.List;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -22,11 +22,13 @@ import java.util.List;
 @Service
 public interface RatingRepository extends MongoRepository<Rating, Long> {
 
-  List<Rating> findAllByPoi(PointOfInterest poi);
+  List<Rating> findAllByPoiId(Long poiId);
 
-  List<Rating> findAllByEntry(Entry entry);
+  List<Rating> findAllByUserIdAndPoiId(Long userId, Long poiId);
+
+//  List<Rating> findAllByEntry(Entry entry);
 
   List<Rating> findByPoiOrderByLastUpdatedDesc(PointOfInterest pointOfInterest);
 
-  List<Rating> findByEntryOrderByLastUpdatedDesc(Entry entry);
+//  List<Rating> findByEntryOrderByLastUpdatedDesc(Entry entry);
 }

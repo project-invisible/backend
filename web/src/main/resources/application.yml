@@ -3,6 +3,10 @@ spring:
     name: web
   cloud:
     gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
       routes:
         - id: auth
           uri: lb://auth
@@ -10,10 +14,12 @@ spring:
             - Path=/auth/**
 #            filters:
         - id: database
-          uri: lb://projectDB
+          uri: http://localhost:8182/
           predicates:
             - Path=/database/**
-#            filters:
+          stripPrefix: false
+#          filters:
+#            - RewritePath=/database/(?.*), /$\{path}
 
 server:
   port: 8083

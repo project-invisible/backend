@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import invivible.database.models.user.User;
+import invivible.database.models.user.UserDto;
 import invivible.database.service.AuthenticationService;
 
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -35,13 +36,13 @@ public class AuthenticationController {
   }
 
   @PostMapping(value = "/register")
-  public ResponseEntity<String> registerUserInDB(@RequestBody User user) {
+  public ResponseEntity<String> registerUserInDB(@RequestBody UserDto user) {
     LOGGER.info("Registration request from: " + user.getEmail());
     return this.authenticationService.registerUserInDB(user);
   }
 
   @PostMapping("")
-  public ResponseEntity<String> authenticateUserInDB(@RequestBody User user) {
+  public ResponseEntity<String> authenticateUserInDB(@RequestBody UserDto user) {
     return this.authenticationService.authenticateUser(user);
   }
 }

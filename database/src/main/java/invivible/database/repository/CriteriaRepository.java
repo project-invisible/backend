@@ -3,11 +3,10 @@ package invivible.database.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import invivible.database.models.criteria.Criteria;
-import invivible.database.models.user.User;
+import invivible.database.models.criteria.Category;
 
 /**
- * Project:        ProjektPool
+ * Project:        In_Visible
  * <p>
  * Author:         Moritz Thomas
  * <p>
@@ -16,5 +15,5 @@ import invivible.database.models.user.User;
  * <p/>
  */
 @Service
-public interface CriteriaRepository extends MongoRepository<Criteria, Long> {
+public interface CriteriaRepository extends MongoRepository<Category, Long> {
 }

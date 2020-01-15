@@ -43,19 +43,24 @@ public class RatingController {
     }
   }
 
-  @GetMapping("/{entryID}")
-  public ResponseEntity<List<Rating>> getAllRatingsForEntry(@PathVariable Long entryID) {
-    List<Rating> allRatingsForEntry = ratingService.getAllRatingsForEntry(entryID);
-    if( allRatingsForEntry != null) {
-      return new ResponseEntity<>(allRatingsForEntry, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-  }
+//  @GetMapping("/{entryID}")
+//  public ResponseEntity<List<Rating>> getAllRatingsForEntry(@PathVariable Long entryID) {
+//    List<Rating> allRatingsForEntry = ratingService.getAllRatingsForEntry(entryID);
+//    if( allRatingsForEntry != null) {
+//      return new ResponseEntity<>(allRatingsForEntry, HttpStatus.OK);
+//    } else {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//  }
 
   @PostMapping()
   public ResponseEntity<Long> postRating(@RequestBody Rating rating) {
-    return new ResponseEntity<>(ratingService.postRating(rating), HttpStatus.OK);
+    Long ratingId = ratingService.postRating(rating);
+    if(ratingId != null) {
+      return new ResponseEntity<>(ratingId, HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
   }
 
   @GetMapping("/newest/{poiID}")
@@ -68,13 +73,13 @@ public class RatingController {
     }
   }
 
-  @GetMapping("/newest/{entryID}")
-  public ResponseEntity<List<Rating>> getNewestRatingsForEntry(@PathVariable Long entryID) {
-    List<Rating> newestRatingForEntry = ratingService.getNewestRatingForEntry(entryID);
-    if(newestRatingForEntry != null) {
-      return new ResponseEntity<>(newestRatingForEntry, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-  }
+//  @GetMapping("/newest/{entryID}")
+//  public ResponseEntity<List<Rating>> getNewestRatingsForEntry(@PathVariable Long entryID) {
+//    List<Rating> newestRatingForEntry = ratingService.getNewestRatingForEntry(entryID);
+//    if(newestRatingForEntry != null) {
+//      return new ResponseEntity<>(newestRatingForEntry, HttpStatus.OK);
+//    } else {
+//      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+//  }
 }
