@@ -3,8 +3,7 @@ package invivible.database.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import invivible.database.models.objects.Entry;
-import invivible.database.models.user.User;
+import invivible.database.models.objects.CultureEntry;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
  * <p/>
  */
 @Service
-public interface EntryRepository extends MongoRepository<Entry, Long> {
+public interface CultureEntryRepository extends MongoRepository<CultureEntry, Long> {
 
-  List<Entry> findByNameLike(String name);
+  List<CultureEntry> findByNameLike(String name);
 }

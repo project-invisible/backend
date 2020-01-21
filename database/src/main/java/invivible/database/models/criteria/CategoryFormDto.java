@@ -1,6 +1,5 @@
 package invivible.database.models.criteria;
 
-import invivible.database.models.enums.RatingOptions;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,7 @@ import java.util.List;
  * <p>
  * Author:         Moritz Thomas
  * <p>
- * Creation date:  15.01.2020
+ * Creation date:  16.01.2020
  * <p>
  * <p/>
  */
@@ -21,11 +20,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategorieRating {
+public class CategoryFormDto {
 
-  private Long id;
-  private Question question;
-  private RatingOptions rating;
-  private String comment;
-  private List<String> tag;
+  private List<Category> categories;
+  private List<SubCategory> subCategories;
+  private List<Question> questions;
 }

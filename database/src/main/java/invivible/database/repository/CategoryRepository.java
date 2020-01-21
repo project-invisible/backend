@@ -3,10 +3,7 @@ package invivible.database.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import invivible.database.models.objects.UserReport;
-import invivible.database.models.user.User;
-
-import java.util.List;
+import invivible.database.models.criteria.Category;
 
 /**
  * Project:        In_Visible
@@ -18,7 +15,5 @@ import java.util.List;
  * <p/>
  */
 @Service
-public interface UserReportRepository extends MongoRepository<UserReport, Long> {
-
-  List<UserReport> findUserReportsBySolvedFalse();
+public interface CategoryRepository extends MongoRepository<Category, Long> {
 }

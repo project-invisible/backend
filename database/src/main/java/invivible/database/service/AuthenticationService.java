@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import invivible.database.models.enums.Role;
 import invivible.database.models.enums.Status;
 import invivible.database.models.helper.Contact;
+import invivible.database.models.user.AuthenticationResponse;
 import invivible.database.models.user.User;
 import invivible.database.models.user.UserDto;
 import invivible.database.repository.UserRepository;
+import invivible.tokenApp.tokens.JWAuthTokenFactory;
 
 import java.util.Date;
 import java.util.Optional;
@@ -36,51 +38,66 @@ public class AuthenticationService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
   private final SequenceGeneratorService sequenceGeneratorService;
+  private final JWAuthTokenFactory tokenFactory;
 
-  public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, SequenceGeneratorService sequenceGeneratorService) {
+  public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, SequenceGeneratorService sequenceGeneratorService, JWAuthTokenFactory tokenFactory) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
     this.sequenceGeneratorService = sequenceGeneratorService;
+    this.tokenFactory = tokenFactory;
   }
 
-  public ResponseEntity<String> registerUserInDB(UserDto user) {
+  public ResponseEntity<AuthenticationResponse> registerUserInDB(UserDto user) {
     Optional<User> byId = this.userRepository.findByEmail(user.getEmail());
+    AuthenticationResponse response = new AuthenticationResponse();
     if(!byId.isPresent()){
       User newUser =
           new User(sequenceGeneratorService.generateId(user_sequence),
               user.getEmail(),
-              user.getUsername(),
+              null,
               false,
               Role.USER,
               new Date(),
               passwordEncoder.encode(user.getPassword()),
-              new Contact(null, null, 0),
+              new Contact(user.getEmail(), null, 0),
               Status.ACTIVE,
               null);
       //    set user anonymous if no username chosen
       if(user.getUsername() == null || user.getUsername().equals("")){
         newUser.setAnonymous(true);
+      } else {
+        newUser.setUsername(user.getUsername());
       }
-      return new ResponseEntity<>(this.userRepository.save(newUser).getId().toString(), HttpStatus.OK);
+      response.setExists(true);
+      response.setEmail(user.getEmail());
+      response.setGroup(Role.USER);
+      response.setToken(tokenFactory.getToken(newUser.getId().toString(), newUser.getEmail(), newUser.getRole().toString()));
+      return new ResponseEntity<>(response, HttpStatus.OK);
     } else {
       LOGGER.warn("User with email: " + user.getEmail() + " already registered.");
-      return new ResponseEntity<>("Email already registered.", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
   }
 
-  public ResponseEntity<String> authenticateUser(UserDto user) {
+  public ResponseEntity<AuthenticationResponse> authenticateUser(UserDto user) {
     Optional<User> byId = this.userRepository.findById(user.getId());
+    AuthenticationResponse response = new AuthenticationResponse();
     if(byId.isPresent()) {
+      User userDB = byId.get();
 //      compare passwords --> authenticate
       if(comparePasswords(user.getPassword(), byId.get().getPassword())) {
-        return new ResponseEntity<>("User with Id: " + byId.get().getId() + "authenticated.", HttpStatus.ACCEPTED);
+        response.setExists(true);
+        response.setGroup(userDB.getRole());
+        response.setEmail(userDB.getEmail());
+        response.setToken(tokenFactory.getToken(userDB.getId().toString(), userDB.getEmail(), userDB.getRole().toString()));
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
       }
 //      mismatch
       else {
-        return new ResponseEntity<>("User with Id: " + byId.get().getId() + "could not be authenticated. Passwords mismatch.", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
       }
     }
-    return null;
+    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
   }
 
   private boolean comparePasswords(String passwordDto, String passwordDB) {

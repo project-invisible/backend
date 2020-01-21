@@ -28,7 +28,7 @@ import java.util.Date;
 @Builder
 @Document(collection = "entry")
 //Todo maybe rename to something more descriptive
-public class Entry {
+public class CultureEntry {
 
   @Id
   private Long id;

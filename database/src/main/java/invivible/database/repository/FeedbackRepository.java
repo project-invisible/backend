@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import invivible.database.models.objects.Feedback;
 import invivible.database.models.user.User;
 
+import java.util.List;
+
 /**
  * Project:        In_Visible
  * <p>
@@ -17,4 +19,6 @@ import invivible.database.models.user.User;
  */
 @Service
 public interface FeedbackRepository extends MongoRepository<Feedback, Long> {
+
+  List<Feedback> findFeedbacksBySolvedIsFalse();
 }

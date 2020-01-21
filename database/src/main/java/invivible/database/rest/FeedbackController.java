@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import invivible.database.models.objects.Feedback;
 import invivible.database.service.FeedbackService;
 
+import java.util.List;
+
 /**
  * Project:        In_Visible
  * <p>
@@ -33,19 +35,18 @@ public class FeedbackController {
   }
 
   @PostMapping()
-  public ResponseEntity<String> postFeedback(@RequestBody Feedback feedback){
-    long id = feedbackService.postFeedback(feedback);
-    return new ResponseEntity<>("Succesfully posted Feedback " + id, HttpStatus.OK);
+  public ResponseEntity<Long> postFeedback(@RequestBody Feedback feedback){
+    return feedbackService.postFeedback(feedback);
   }
 
   @GetMapping(value = "/{feedbackID}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Feedback> getFeedback(@PathVariable Long feedbackID) {
-    Feedback feedback = feedbackService.getFeedback(feedbackID);
-    if(feedback != null) {
-      return new ResponseEntity<>(feedback, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    return feedbackService.getFeedback(feedbackID);
+  }
+
+  @GetMapping()
+  public ResponseEntity<List<Feedback>> getAllOpenFeedback() {
+    return feedbackService.getAllOpenFeedback();
   }
 }
 

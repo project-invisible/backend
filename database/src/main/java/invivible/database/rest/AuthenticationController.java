@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import invivible.database.models.user.AuthenticationResponse;
 import invivible.database.models.user.User;
 import invivible.database.models.user.UserDto;
 import invivible.database.service.AuthenticationService;
@@ -36,13 +37,13 @@ public class AuthenticationController {
   }
 
   @PostMapping(value = "/register")
-  public ResponseEntity<String> registerUserInDB(@RequestBody UserDto user) {
+  public ResponseEntity<AuthenticationResponse> registerUserInDB(@RequestBody UserDto user) {
     LOGGER.info("Registration request from: " + user.getEmail());
     return this.authenticationService.registerUserInDB(user);
   }
 
   @PostMapping("")
-  public ResponseEntity<String> authenticateUserInDB(@RequestBody UserDto user) {
+  public ResponseEntity<AuthenticationResponse> authenticateUserInDB(@RequestBody UserDto user) {
     return this.authenticationService.authenticateUser(user);
   }
 }

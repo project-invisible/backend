@@ -1,11 +1,13 @@
 package invivible.database.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import invivible.database.models.objects.Feedback;
 import invivible.database.repository.FeedbackRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,19 +22,29 @@ import java.util.Optional;
 @Service
 public class FeedbackService {
 
+  private final String FEEDBACK_SEQUENCE = "feedback_sequence";
+
   private final FeedbackRepository feedbackRepository;
+  private SequenceGeneratorService sequenceGeneratorService;
 
-  public FeedbackService(FeedbackRepository feedbackRepository) {
+  public FeedbackService(FeedbackRepository feedbackRepository, SequenceGeneratorService sequenceGeneratorService) {
     this.feedbackRepository = feedbackRepository;
+    this.sequenceGeneratorService = sequenceGeneratorService;
   }
 
-  public long postFeedback(Feedback feedback){
+  public ResponseEntity<Long> postFeedback(Feedback feedback){
+    feedback.setId(sequenceGeneratorService.generateId(FEEDBACK_SEQUENCE));
     Optional<Feedback> feedbackFromDB = feedbackRepository.findById(feedback.getId());
-    return feedbackRepository.save(feedback).getId();
+    return new ResponseEntity<>(feedbackRepository.save(feedback).getId(),HttpStatus.OK);
   }
 
-  public Feedback getFeedback(Long feedbackID) {
+  public ResponseEntity<Feedback> getFeedback(Long feedbackID) {
     Optional<Feedback> byId = feedbackRepository.findById(feedbackID);
-    return byId.orElse(null);
+    return byId.map(feedback -> new ResponseEntity<>(feedback, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+  public ResponseEntity<List<Feedback>> getAllOpenFeedback() {
+    List<Feedback> feedbacks = feedbackRepository.findFeedbacksBySolvedIsFalse();
+    return new ResponseEntity<>(feedbacks, HttpStatus.OK);
   }
 }

@@ -17,6 +17,7 @@ import invivible.database.service.PointOfInterestService;
 
 import javax.ws.rs.Path;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,9 @@ public class PointOfInterestController {
 
   @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<PointOfInterest>> searchForPoi(@RequestParam String query) {
+    if(query == null || query.equals("")) {
+      return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+    }
     return new ResponseEntity<>(pointOfInterestService.searchForPoi(query), HttpStatus.OK);
   }
 

@@ -54,10 +54,10 @@ public class RatingController {
 //  }
 
   @PostMapping()
-  public ResponseEntity<Long> postRating(@RequestBody Rating rating) {
+  public ResponseEntity<String> postRating(@RequestBody Rating rating) {
     Long ratingId = ratingService.postRating(rating);
     if(ratingId != null) {
-      return new ResponseEntity<>(ratingId, HttpStatus.OK);
+      return new ResponseEntity<>("Rating saved with Id: " + ratingId, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

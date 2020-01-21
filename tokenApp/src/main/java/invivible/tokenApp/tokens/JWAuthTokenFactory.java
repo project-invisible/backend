@@ -27,13 +27,16 @@ public class JWAuthTokenFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(JWAuthTokenFactory.class);
     public static final String TYPE_OF_TOKEN = "AuthToken";
 
-    private static final String ISSUER = "projektpool.adesso.de";
+    private static final String ISSUER = "invisible";
 
     @Value("#{${jwt.timeToLiveMinutes:30} * 60L * 1000L}")
     protected long defaultTtlMillis;
 
-    @Autowired
-    private KeyService keyService;
+    private final KeyService keyService;
+
+    public JWAuthTokenFactory(KeyService keyService) {
+        this.keyService = keyService;
+    }
 
     /**
      * get a base64-coded HmacSHA512 signed JWT string for the supplied claims (with a default timeToLive (expiry time))

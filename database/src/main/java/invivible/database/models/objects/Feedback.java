@@ -29,6 +29,7 @@ public class Feedback {
   private Long id;
   private User user;
   private User editor;
+  private boolean solved;
   private String message;
 
 }

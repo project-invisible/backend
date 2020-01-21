@@ -4,11 +4,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import invivible.database.models.criteria.QuestionRatingObject;
 import invivible.database.models.helper.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * Project:        In_Visible
@@ -36,7 +39,7 @@ public class PointOfInterest {
   private String email;
   private String website;
   private Coordinates coordinates;
-  private Float overallRating;
+  private List<QuestionRatingObject> overallRatingPerQuestion;
 
 
 }
