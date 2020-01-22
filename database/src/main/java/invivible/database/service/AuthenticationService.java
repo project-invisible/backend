@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import invivible.database.auth.tokens.JWAuthTokenFactory;
 import invivible.database.models.enums.Role;
 import invivible.database.models.enums.Status;
 import invivible.database.models.helper.Contact;
@@ -14,7 +15,6 @@ import invivible.database.models.user.AuthenticationResponse;
 import invivible.database.models.user.User;
 import invivible.database.models.user.UserDto;
 import invivible.database.repository.UserRepository;
-import invivible.tokenApp.tokens.JWAuthTokenFactory;
 
 import java.util.Date;
 import java.util.Optional;

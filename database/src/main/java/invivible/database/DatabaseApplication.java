@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableDiscoveryClient
 @SpringBootApplication
-@ComponentScan({"invivible", "invivible.tokenApp"})
+@ComponentScan({"invivible"})
 public class DatabaseApplication {
 
 	public static void main(String[] args) {
