@@ -25,4 +25,5 @@ public class AuthenticationResponse {
   public Role group;
   public String token;
   public String error;
+  public Long id;
 }

@@ -16,8 +16,10 @@ import invivible.database.repository.RatingRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Project:        In_Visible
@@ -72,12 +74,14 @@ public class RatingService {
         rating.setCreationDate(new Date());
         rating.setLastUpdated(new Date());
 
-        rating.getCategorieRatings().forEach(categorieRating -> overallRatingsForQuestions.add(
-            new QuestionRatingObject(
-                categorieRating.getQuestion(),
-                getOverallRatingForQuestion(categorieRating.getQuestion())
-            )
-        ));
+        if( rating.getCategorieRatings().size() > 0){
+          rating.getCategorieRatings().forEach(categorieRating -> overallRatingsForQuestions.add(
+              new QuestionRatingObject(
+                  categorieRating.getQuestion(),
+                  getOverallRatingForQuestion(categorieRating.getQuestion())
+              )
+          ));
+        }
         byId.get().setOverallRatingPerQuestion(overallRatingsForQuestions);
         pointOfInterestRepository.save(byId.get());
         return ratingRepository.save(rating).getId();

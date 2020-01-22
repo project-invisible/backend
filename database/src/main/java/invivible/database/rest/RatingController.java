@@ -1,6 +1,7 @@
 package invivible.database.rest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +34,7 @@ public class RatingController {
     this.ratingService = ratingService;
   }
 
-  @GetMapping("/{poiId}")
+  @GetMapping( value = "/{poiId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Rating>> getAllRatingsForPoi(@PathVariable Long poiId) {
     List<Rating> allRatingsForPoi = ratingService.getAllRatingsForPoi(poiId);
     if( allRatingsForPoi != null) {
@@ -53,7 +54,7 @@ public class RatingController {
 //    }
 //  }
 
-  @PostMapping()
+  @PostMapping(  value = "", produces = MediaType.APPLICATION_JSON_VALUE )
   public ResponseEntity<String> postRating(@RequestBody Rating rating) {
     Long ratingId = ratingService.postRating(rating);
     if(ratingId != null) {
@@ -63,7 +64,7 @@ public class RatingController {
     }
   }
 
-  @GetMapping("/newest/{poiID}")
+  @GetMapping( value = "/newest/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Rating>> getNewestRatingsForPoi(@PathVariable Long poiID) {
     List<Rating> newestRatingForPoi = ratingService.getNewestRatingForPoi(poiID);
     if(newestRatingForPoi != null) {

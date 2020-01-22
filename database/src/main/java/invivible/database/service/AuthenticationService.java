@@ -71,6 +71,7 @@ public class AuthenticationService {
       response.setExists(true);
       response.setEmail(user.getEmail());
       response.setGroup(Role.USER);
+      response.setId(newUser.getId());
       response.setToken(tokenFactory.getToken(newUser.getId().toString(), newUser.getEmail(), newUser.getRole().toString()));
       return new ResponseEntity<>(response, HttpStatus.OK);
     } else {
@@ -80,13 +81,14 @@ public class AuthenticationService {
   }
 
   public ResponseEntity<AuthenticationResponse> authenticateUser(UserDto user) {
-    Optional<User> byId = this.userRepository.findById(user.getId());
+    Optional<User> byMail = this.userRepository.findByEmail(user.getEmail());
     AuthenticationResponse response = new AuthenticationResponse();
-    if(byId.isPresent()) {
-      User userDB = byId.get();
+    if(byMail.isPresent()) {
+      User userDB = byMail.get();
 //      compare passwords --> authenticate
-      if(comparePasswords(user.getPassword(), byId.get().getPassword())) {
+      if(comparePasswords(user.getPassword(), byMail.get().getPassword())) {
         response.setExists(true);
+        response.setId(userDB.getId());
         response.setGroup(userDB.getRole());
         response.setEmail(userDB.getEmail());
         response.setToken(tokenFactory.getToken(userDB.getId().toString(), userDB.getEmail(), userDB.getRole().toString()));
