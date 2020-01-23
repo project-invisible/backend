@@ -36,13 +36,13 @@ public class AuthenticationController {
     this.authenticationService = authenticationService;
   }
 
-  @PostMapping(value = "/register")
+  @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<AuthenticationResponse> registerUserInDB(@RequestBody UserDto user) {
     LOGGER.info("Registration request from: " + user.getEmail());
     return this.authenticationService.registerUserInDB(user);
   }
 
-  @PostMapping("")
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<AuthenticationResponse> authenticateUserInDB(@RequestBody UserDto user) {
     return this.authenticationService.authenticateUser(user);
   }
