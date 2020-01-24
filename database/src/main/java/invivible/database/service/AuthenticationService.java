@@ -48,6 +48,9 @@ public class AuthenticationService {
   }
 
   public ResponseEntity<AuthenticationResponse> registerUserInDB(UserDto user) {
+    if(user.getEmail().equals("") || user.getEmail() == null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     Optional<User> byId = this.userRepository.findByEmail(user.getEmail());
     AuthenticationResponse response = new AuthenticationResponse();
     if(!byId.isPresent()){

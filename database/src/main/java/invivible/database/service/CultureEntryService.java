@@ -32,15 +32,18 @@ public class CultureEntryService {
   }
 
   public List<CultureEntry> getAllEntries() {
+
     return entryRepository.findAll();
   }
 
   public Optional<CultureEntry> getEntry(Long entryID) {
+
     return entryRepository.findById(entryID);
   }
 
   public List<CultureEntry> searchForEntry(String query) {
-    return entryRepository.findByNameLike(query);
+    List<CultureEntry> byNameLike = entryRepository.findByNameLike(query);
+    return byNameLike;
   }
 
   public Long postCultureEntry(CultureEntry cultureEntry) {

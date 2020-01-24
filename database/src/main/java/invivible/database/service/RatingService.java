@@ -12,14 +12,13 @@ import invivible.database.repository.CultureEntryRepository;
 import invivible.database.repository.PointOfInterestRepository;
 import invivible.database.repository.QuestionRepository;
 import invivible.database.repository.RatingRepository;
+import invivible.database.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Project:        In_Visible
@@ -39,12 +38,14 @@ public class RatingService {
   private final PointOfInterestRepository pointOfInterestRepository;
   private final SequenceGeneratorService sequenceGeneratorService;
   private final QuestionRepository questionRepository;
+  private final UserRepository userRepository;
 
-  public RatingService(RatingRepository ratingRepository, PointOfInterestRepository pointOfInterestRepository, CultureEntryRepository entryRepository, SequenceGeneratorService sequenceGeneratorService, QuestionRepository questionRepository) {
+  public RatingService(RatingRepository ratingRepository, PointOfInterestRepository pointOfInterestRepository, CultureEntryRepository entryRepository, SequenceGeneratorService sequenceGeneratorService, QuestionRepository questionRepository, UserRepository userRepository) {
     this.ratingRepository = ratingRepository;
     this.pointOfInterestRepository = pointOfInterestRepository;
     this.sequenceGeneratorService = sequenceGeneratorService;
     this.questionRepository = questionRepository;
+    this.userRepository = userRepository;
   }
 
   public List<Rating> getAllRatingsForPoi(Long poiId) {
@@ -63,10 +64,10 @@ public class RatingService {
    * @return
    */
   public Long postRating(Rating rating) {
-    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(rating.getPoi().getId());
+    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(rating.getPoiId());
     if(byId.isPresent()) {
       List<QuestionRatingObject> overallRatingsForQuestions = new ArrayList<>();
-      List<Rating> allByUserIdAndPoiId = ratingRepository.findAllByUserIdAndPoiId(rating.getUser().getId(), rating.getPoi().getId());
+      List<Rating> allByUserIdAndPoiId = ratingRepository.findAllByUserIdAndPoiId(rating.getUserId(), rating.getPoiId());
       if(allByUserIdAndPoiId.size() > 0) {
         return null;
       } else {
@@ -92,8 +93,9 @@ public class RatingService {
   }
 
   public List<Rating> getNewestRatingForPoi(Long poiID) {
-    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(poiID);
-    return byId.map(ratingRepository::findByPoiOrderByLastUpdatedDesc).orElse(null);
+    return ratingRepository.findByPoiIdOrderByLastUpdatedDesc(poiID).stream()
+        .peek(rating -> rating.setUser(userRepository.findById(rating.getUserId()).orElse(null)))
+        .collect(Collectors.toList());
   }
 
 //  public List<Rating> getNewestRatingForEntry(Long entryID) {
@@ -107,6 +109,9 @@ public class RatingService {
         .flatMap(List::stream)
         .filter(categorieRating -> categorieRating.getQuestion() == question)
         .collect(Collectors.toList());
+    if(allCategoryRatings.size() == 0) {
+      return 0F;
+    }
     List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
         .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
         .collect(Collectors.toList());

@@ -14,6 +14,8 @@ import invivible.database.models.user.User;
 import invivible.database.models.user.UserDto;
 import invivible.database.service.AuthenticationService;
 
+import javax.validation.Valid;
+
 
 /**
  * Project:        In_Visible
@@ -37,13 +39,13 @@ public class AuthenticationController {
   }
 
   @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<AuthenticationResponse> registerUserInDB(@RequestBody UserDto user) {
+  public ResponseEntity<AuthenticationResponse> registerUserInDB(@RequestBody @Valid UserDto user) {
     LOGGER.info("Registration request from: " + user.getEmail());
     return this.authenticationService.registerUserInDB(user);
   }
 
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<AuthenticationResponse> authenticateUserInDB(@RequestBody UserDto user) {
+  public ResponseEntity<AuthenticationResponse> authenticateUserInDB(@RequestBody @Valid UserDto user) {
     return this.authenticationService.authenticateUser(user);
   }
 }

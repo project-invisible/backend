@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -42,10 +43,9 @@ public class User {
   private Long id;
   @NotNull
   @NotEmpty
-  @ValidEmail
+  @Email(message = "No valid email")
   private String email;
   private String username;
-//  private List<Rating> ratings;
   private boolean anonymous;
   private Role role;
   private Date creation_date;
