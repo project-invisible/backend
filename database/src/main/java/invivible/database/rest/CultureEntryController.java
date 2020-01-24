@@ -1,5 +1,7 @@
 package invivible.database.rest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import invivible.database.models.objects.CultureEntry;
 import invivible.database.service.CultureEntryService;
@@ -53,8 +57,8 @@ public class CultureEntryController {
   }
 
   @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<String> postCultureEntry(@RequestBody CultureEntry cultureEntry) {
-    Long entryId = entryService.postCultureEntry(cultureEntry);
+  public ResponseEntity<String> postCultureEntry(@RequestPart("cultureEntry") CultureEntry cultureEntry, @RequestPart("cultureImage") MultipartFile file) {
+    Long entryId = entryService.postCultureEntry(cultureEntry, file);
     return new ResponseEntity<>("Entry saved with Id: " + entryId, HttpStatus.OK);
   }
 

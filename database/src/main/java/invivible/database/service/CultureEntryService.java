@@ -1,6 +1,9 @@
 package invivible.database.service;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import invivible.database.models.objects.CultureEntry;
 import invivible.database.repository.CultureEntryRepository;
@@ -46,9 +49,15 @@ public class CultureEntryService {
     return byNameLike;
   }
 
-  public Long postCultureEntry(CultureEntry cultureEntry) {
+  public Long postCultureEntry(CultureEntry cultureEntry, MultipartFile file) {
     cultureEntry.setId(sequenceGeneratorService.generateId(ENTRY_SEQUENCE));
     cultureEntry.setCreationDate(new Date());
+    try {
+      cultureEntry.setImage(
+        new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+    } catch (Exception e) {
+      //TODO: handle exception
+    }
    return entryRepository.save(cultureEntry).getId();
   }
 }
