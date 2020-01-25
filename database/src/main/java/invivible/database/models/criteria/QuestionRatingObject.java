@@ -21,6 +21,6 @@ import java.util.List;
 @AllArgsConstructor@Builder
 public class QuestionRatingObject {
 
-  private Question question;
+  private Long questionId;
   private Float rating;
 }

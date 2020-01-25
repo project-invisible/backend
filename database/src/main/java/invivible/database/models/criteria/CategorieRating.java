@@ -24,7 +24,7 @@ import java.util.List;
 public class CategorieRating {
 
   private Long id;
-  private Question question;
+  private Long questionId;
   private RatingOptions rating;
   private String comment;
   private List<String> tag;

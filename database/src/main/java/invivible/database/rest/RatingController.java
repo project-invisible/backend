@@ -64,6 +64,11 @@ public class RatingController {
     }
   }
 
+  @GetMapping("/{ratingId}")
+  public ResponseEntity<Rating> getRating(@PathVariable Long ratingId) {
+    return ratingService.getRating(ratingId);
+  }
+
   @GetMapping( value = "/newest/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Rating>> getNewestRatingsForPoi(@PathVariable Long poiID) {
     List<Rating> newestRatingForPoi = ratingService.getNewestRatingForPoi(poiID);

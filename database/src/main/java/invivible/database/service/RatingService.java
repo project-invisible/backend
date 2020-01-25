@@ -1,9 +1,10 @@
 package invivible.database.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import invivible.database.models.criteria.CategorieRating;
-import invivible.database.models.criteria.Question;
 import invivible.database.models.criteria.QuestionRatingObject;
 import invivible.database.models.enums.RatingOptions;
 import invivible.database.models.objects.PointOfInterest;
@@ -17,6 +18,7 @@ import invivible.database.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -78,8 +80,8 @@ public class RatingService {
         if( rating.getCategorieRatings().size() > 0){
           rating.getCategorieRatings().forEach(categorieRating -> overallRatingsForQuestions.add(
               new QuestionRatingObject(
-                  categorieRating.getQuestion(),
-                  getOverallRatingForQuestion(categorieRating.getQuestion())
+                  categorieRating.getQuestionId(),
+                  getOverallRatingForQuestion(categorieRating.getQuestionId())
               )
           ));
         }
@@ -103,18 +105,23 @@ public class RatingService {
 //    return byId.map(ratingRepository::findByEntryOrderByLastUpdatedDesc).orElse(null);
 //  }
 
-  private Float getOverallRatingForQuestion(Question question) {
-    List<CategorieRating> allCategoryRatings = ratingRepository.findAll().stream()
-        .map(Rating::getCategorieRatings)
-        .flatMap(List::stream)
-        .filter(categorieRating -> categorieRating.getQuestion() == question)
-        .collect(Collectors.toList());
-    if(allCategoryRatings.size() == 0) {
-      return 0F;
-    }
-    List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
-        .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
-        .collect(Collectors.toList());
-    return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+  private Float getOverallRatingForQuestion(Long questionId) {
+      List<CategorieRating> allCategoryRatings = ratingRepository.findAll().stream()
+          .map(Rating::getCategorieRatings)
+          .flatMap(List::stream)
+          .filter(categorieRating -> Objects.equals(categorieRating.getQuestionId(), questionId))
+          .collect(Collectors.toList());
+      if(allCategoryRatings.size() == 0) {
+        return 0F;
+      }
+      List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
+          .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
+          .collect(Collectors.toList());
+      return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+  }
+
+  public ResponseEntity<Rating> getRating(Long ratingId) {
+    Optional<Rating> byId = ratingRepository.findById(ratingId);
+    return byId.map(rating -> new ResponseEntity<>(rating, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }

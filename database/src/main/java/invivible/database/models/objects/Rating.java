@@ -37,10 +37,6 @@ public class Rating {
   @Transient
   private User user;
   private Long poiId;
-  @Transient
-  private PointOfInterest poi;
-//  private Entry entry;
-//  private Float overallRating;
   private String generalComment;
   private List<CategorieRating> categorieRatings;
   private Date creationDate;
