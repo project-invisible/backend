@@ -29,8 +29,8 @@ public class Question {
   @Id
   private Long id;
   private String text;
-  private Category category;
-  private SubCategory subCategory;
+  private Long categoryId;
+  private Long subCategoryId;
   private Boolean hasCheckbox;
   private List<Integer> followUpQuestion;
 }

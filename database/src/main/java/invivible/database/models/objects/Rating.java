@@ -1,6 +1,7 @@
 package invivible.database.models.objects;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import invivible.database.models.criteria.CategorieRating;
@@ -32,10 +33,10 @@ public class Rating {
 
   @Id
   private Long id;
+  private Long userId;
+  @Transient
   private User user;
-  private PointOfInterest poi;
-//  private Entry entry;
-//  private Float overallRating;
+  private Long poiId;
   private String generalComment;
   private List<CategorieRating> categorieRatings;
   private Date creationDate;

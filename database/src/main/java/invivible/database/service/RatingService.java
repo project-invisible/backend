@@ -1,9 +1,10 @@
 package invivible.database.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import invivible.database.models.criteria.CategorieRating;
-import invivible.database.models.criteria.Question;
 import invivible.database.models.criteria.QuestionRatingObject;
 import invivible.database.models.enums.RatingOptions;
 import invivible.database.models.objects.PointOfInterest;
@@ -12,6 +13,7 @@ import invivible.database.repository.CultureEntryRepository;
 import invivible.database.repository.PointOfInterestRepository;
 import invivible.database.repository.QuestionRepository;
 import invivible.database.repository.RatingRepository;
+import invivible.database.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Project:        In_Visible
@@ -39,12 +40,14 @@ public class RatingService {
   private final PointOfInterestRepository pointOfInterestRepository;
   private final SequenceGeneratorService sequenceGeneratorService;
   private final QuestionRepository questionRepository;
+  private final UserRepository userRepository;
 
-  public RatingService(RatingRepository ratingRepository, PointOfInterestRepository pointOfInterestRepository, CultureEntryRepository entryRepository, SequenceGeneratorService sequenceGeneratorService, QuestionRepository questionRepository) {
+  public RatingService(RatingRepository ratingRepository, PointOfInterestRepository pointOfInterestRepository, CultureEntryRepository entryRepository, SequenceGeneratorService sequenceGeneratorService, QuestionRepository questionRepository, UserRepository userRepository) {
     this.ratingRepository = ratingRepository;
     this.pointOfInterestRepository = pointOfInterestRepository;
     this.sequenceGeneratorService = sequenceGeneratorService;
     this.questionRepository = questionRepository;
+    this.userRepository = userRepository;
   }
 
   public List<Rating> getAllRatingsForPoi(Long poiId) {
@@ -63,10 +66,10 @@ public class RatingService {
    * @return
    */
   public Long postRating(Rating rating) {
-    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(rating.getPoi().getId());
+    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(rating.getPoiId());
     if(byId.isPresent()) {
       List<QuestionRatingObject> overallRatingsForQuestions = new ArrayList<>();
-      List<Rating> allByUserIdAndPoiId = ratingRepository.findAllByUserIdAndPoiId(rating.getUser().getId(), rating.getPoi().getId());
+      List<Rating> allByUserIdAndPoiId = ratingRepository.findAllByUserIdAndPoiId(rating.getUserId(), rating.getPoiId());
       if(allByUserIdAndPoiId.size() > 0) {
         return null;
       } else {
@@ -77,8 +80,8 @@ public class RatingService {
         if( rating.getCategorieRatings().size() > 0){
           rating.getCategorieRatings().forEach(categorieRating -> overallRatingsForQuestions.add(
               new QuestionRatingObject(
-                  categorieRating.getQuestion(),
-                  getOverallRatingForQuestion(categorieRating.getQuestion())
+                  categorieRating.getQuestionId(),
+                  getOverallRatingForQuestion(categorieRating.getQuestionId())
               )
           ));
         }
@@ -92,8 +95,9 @@ public class RatingService {
   }
 
   public List<Rating> getNewestRatingForPoi(Long poiID) {
-    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(poiID);
-    return byId.map(ratingRepository::findByPoiOrderByLastUpdatedDesc).orElse(null);
+    return ratingRepository.findByPoiIdOrderByLastUpdatedDesc(poiID).stream()
+        .peek(rating -> rating.setUser(userRepository.findById(rating.getUserId()).orElse(null)))
+        .collect(Collectors.toList());
   }
 
 //  public List<Rating> getNewestRatingForEntry(Long entryID) {
@@ -101,15 +105,23 @@ public class RatingService {
 //    return byId.map(ratingRepository::findByEntryOrderByLastUpdatedDesc).orElse(null);
 //  }
 
-  private Float getOverallRatingForQuestion(Question question) {
-    List<CategorieRating> allCategoryRatings = ratingRepository.findAll().stream()
-        .map(Rating::getCategorieRatings)
-        .flatMap(List::stream)
-        .filter(categorieRating -> categorieRating.getQuestion() == question)
-        .collect(Collectors.toList());
-    List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
-        .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
-        .collect(Collectors.toList());
-    return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+  private Float getOverallRatingForQuestion(Long questionId) {
+      List<CategorieRating> allCategoryRatings = ratingRepository.findAll().stream()
+          .map(Rating::getCategorieRatings)
+          .flatMap(List::stream)
+          .filter(categorieRating -> Objects.equals(categorieRating.getQuestionId(), questionId))
+          .collect(Collectors.toList());
+      if(allCategoryRatings.size() == 0) {
+        return 0F;
+      }
+      List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
+          .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
+          .collect(Collectors.toList());
+      return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+  }
+
+  public ResponseEntity<Rating> getRating(Long ratingId) {
+    Optional<Rating> byId = ratingRepository.findById(ratingId);
+    return byId.map(rating -> new ResponseEntity<>(rating, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
   }
 }
