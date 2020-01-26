@@ -34,7 +34,7 @@ public class FeedbackController {
     this.feedbackService = feedbackService;
   }
 
-  @PostMapping()
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Long> postFeedback(@RequestBody Feedback feedback){
     return feedbackService.postFeedback(feedback);
   }
@@ -44,7 +44,7 @@ public class FeedbackController {
     return feedbackService.getFeedback(feedbackID);
   }
 
-  @GetMapping()
+  @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Feedback>> getAllOpenFeedback() {
     return feedbackService.getAllOpenFeedback();
   }

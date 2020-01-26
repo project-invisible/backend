@@ -1,5 +1,6 @@
 package invivible.database.rest;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,12 +40,12 @@ public class UserReportController {
     return userReportService.getUserReport(userReportId);
   }
 
-  @PostMapping()
+  @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Long> postUserReport(@RequestBody UserReport userReport) {
     return userReportService.postUserReport(userReport);
   }
 
-  @GetMapping()
+  @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<UserReport>> getAllOpenUserReports() {
     return userReportService.getAllOpenUserReports();
   }
