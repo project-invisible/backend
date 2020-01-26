@@ -117,7 +117,9 @@ public class RatingService {
       List<CategorieRating> positiveCategoryRatings = allCategoryRatings.stream()
           .filter(categorieRating -> categorieRating.getRating() == RatingOptions.YES)
           .collect(Collectors.toList());
-      return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+      if(positiveCategoryRatings.size() > 0 ) {
+        return (float) (allCategoryRatings.size() / positiveCategoryRatings.size());
+      } else return 0F;
   }
 
   public ResponseEntity<Rating> getRating(Long ratingId) {
