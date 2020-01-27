@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import invivible.database.models.objects.PreviewRatingDTO;
 import invivible.database.models.objects.Rating;
 import invivible.database.service.RatingService;
 
@@ -34,10 +35,10 @@ public class RatingController {
     this.ratingService = ratingService;
   }
 
-  @GetMapping( value = "/{poiId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping( value = "/poi/{poiId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Rating>> getAllRatingsForPoi(@PathVariable Long poiId) {
     List<Rating> allRatingsForPoi = ratingService.getAllRatingsForPoi(poiId);
-    if( allRatingsForPoi != null) {
+    if( allRatingsForPoi != null && allRatingsForPoi.size() < 1) {
       return new ResponseEntity<>(allRatingsForPoi, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -64,19 +65,31 @@ public class RatingController {
     }
   }
 
-  @GetMapping("/{ratingId}")
-  public ResponseEntity<Rating> getRating(@PathVariable Long ratingId) {
-    return ratingService.getRating(ratingId);
-  }
+  @GetMapping(value = "/{ratingId}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<Rating> getRating(@PathVariable Long ratingId) {
+   return ratingService.getRating(ratingId);
+   }
 
-  @GetMapping( value = "/newest/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Rating>> getNewestRatingsForPoi(@PathVariable Long poiID) {
-    List<Rating> newestRatingForPoi = ratingService.getNewestRatingForPoi(poiID);
-    if(newestRatingForPoi != null) {
-      return new ResponseEntity<>(newestRatingForPoi, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+   @GetMapping( value = "/newest/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
+   public ResponseEntity<List<Rating>> getNewestRatingsForPoi(@PathVariable Long poiID) {
+   List<Rating> newestRatingForPoi = ratingService.getNewestRatingForPoi(poiID);
+   if(newestRatingForPoi != null) {
+   return new ResponseEntity<>(newestRatingForPoi, HttpStatus.OK);
+   } else {
+   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+   }
+   }
+
+   /**
+   * Return the defined top 5 questions for Poi to didplay at the detail view
+   * Currently the top 5 are hardcoded
+   * Could change that to datamodel field or config parameter/ variable
+   * @param poiID
+   * @return
+   */
+  @GetMapping(value = "/top/{poiID}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<PreviewRatingDTO>> getTopQuestionsForPoi(@PathVariable Long poiID) {
+    return ratingService.getTopQuestionsForPoi(poiID);
   }
 
 //  @GetMapping("/newest/{entryID}")

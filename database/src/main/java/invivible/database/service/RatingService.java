@@ -8,6 +8,7 @@ import invivible.database.models.criteria.CategorieRating;
 import invivible.database.models.criteria.QuestionRatingObject;
 import invivible.database.models.enums.RatingOptions;
 import invivible.database.models.objects.PointOfInterest;
+import invivible.database.models.objects.PreviewRatingDTO;
 import invivible.database.models.objects.Rating;
 import invivible.database.repository.CultureEntryRepository;
 import invivible.database.repository.PointOfInterestRepository;
@@ -16,8 +17,11 @@ import invivible.database.repository.RatingRepository;
 import invivible.database.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,8 +55,7 @@ public class RatingService {
   }
 
   public List<Rating> getAllRatingsForPoi(Long poiId) {
-    Optional<PointOfInterest> byId = pointOfInterestRepository.findById(poiId);
-    return byId.map(pointOfInterest -> ratingRepository.findAllByPoiId(pointOfInterest.getId())).orElse(null);
+    return ratingRepository.findAllByPoiId(poiId);
   }
 
 //  public List<Rating> getAllRatingsForEntry(Long entryID) {
@@ -125,5 +128,31 @@ public class RatingService {
   public ResponseEntity<Rating> getRating(Long ratingId) {
     Optional<Rating> byId = ratingRepository.findById(ratingId);
     return byId.map(rating -> new ResponseEntity<>(rating, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+  }
+
+//  unfinished
+  public ResponseEntity<List<PreviewRatingDTO>> getTopQuestionsForPoi(Long poiID) {
+
+//    current top 7 questions - should be 5 but the first is seperated into 3
+    List<Long> questionIds = new ArrayList<>(Arrays.asList(1L, 2L, 3L, 7L, 25L, 32L, 40L));
+    Map<Long, List<CategorieRating>> ratingMap = questionIds.stream().collect(Collectors.toMap(Long::longValue, List -> new ArrayList<>()));
+    List<CategorieRating> categorieRatingList = ratingRepository.findByPoiId(poiID).stream()
+        .map(Rating::getCategorieRatings)
+        .flatMap(List::stream)
+        .filter(categorieRating -> questionIds.contains(categorieRating.getQuestionId()))
+        .peek(categorieRating -> {
+          if (categorieRating.getRating() == RatingOptions.YES) {
+            ratingMap.get(categorieRating.getQuestionId()).add(categorieRating);
+          }
+        })
+        .collect(Collectors.toList());
+    return new ResponseEntity<>(questionIds.stream()
+        .map(aLong -> new PreviewRatingDTO(
+            (float) (ratingMap.get(aLong).size() /
+                            categorieRatingList.stream()
+                                .filter(categorieRating -> categorieRating.getQuestionId().equals(aLong))
+                                .count()),
+              questionRepository.findById(aLong).get()))
+        .collect(Collectors.toList()),HttpStatus.OK);
   }
 }

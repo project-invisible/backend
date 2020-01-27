@@ -28,6 +28,7 @@ public interface RatingRepository extends MongoRepository<Rating, Long> {
 
   List<Rating> findByPoiIdOrderByLastUpdatedDesc(Long poiId);
 
+  List<Rating> findByPoiId(Long poiId);
 //  List<Rating> findByEntryOrderByLastUpdatedDesc(Entry entry);
 
 }

@@ -1,0 +1,26 @@
+version: '3.3'
+
+networks:
+  network-front:
+    driver: bridge
+  network-back:
+    driver: bridge
+
+volumes:
+  da-data:
+
+services:
+  service-discovery:
+    build: ../service-discovery
+    ports:
+      - 8761:8761
+    networks:
+      - network-back
+      - network-front
+  database:
+    build: ../database
+    ports:
+    - 8182:8182
+    networks:
+      - network-front
+      - network-back
