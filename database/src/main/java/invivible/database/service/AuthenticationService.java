@@ -76,6 +76,7 @@ public class AuthenticationService {
       response.setGroup(Role.USER);
       response.setId(newUser.getId());
       response.setToken(tokenFactory.getToken(newUser.getId().toString(), newUser.getEmail(), newUser.getRole().toString()));
+      userRepository.save(newUser);
       return new ResponseEntity<>(response, HttpStatus.OK);
     } else {
       LOGGER.warn("User with email: " + user.getEmail() + " already registered.");
