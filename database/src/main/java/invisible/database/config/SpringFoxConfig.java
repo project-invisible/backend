@@ -26,7 +26,7 @@ public class SpringFoxConfig {
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("invivible.database"))
+        .apis(RequestHandlerSelectors.basePackage("invisible.database"))
         .paths(PathSelectors.any())
         .build();
   }

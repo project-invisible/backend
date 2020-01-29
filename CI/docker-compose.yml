@@ -11,15 +11,28 @@ volumes:
 
 services:
   service-discovery:
+    hostname: service-discovery
     build: ../service-discovery
     networks:
       - network-back
       - network-front
+    ports:
+      - "8761:8761"
+    expose: 
+      - "8761"
+    environment: 
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/EurekaServer/eureka
   database:
     build: ../database
     networks:
       - network-front
       - network-back
+    links: 
+      - service-discovery
+    depends_on:
+      - service-discovery
+    environment: 
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/EurekaServer/eureka
   web:
     build: ../web
     ports:
@@ -27,3 +40,9 @@ services:
     networks:
       - network-back
       - network-front
+    links:
+      - service-discovery
+    depends_on:
+      - service-discovery
+    environment: 
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-discovery:8761/EurekaServer/eureka

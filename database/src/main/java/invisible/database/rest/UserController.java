@@ -23,7 +23,7 @@ import invisible.database.service.UserService;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/user")
+@RequestMapping("/user")
 public class UserController {
 
   private final UserService userService;

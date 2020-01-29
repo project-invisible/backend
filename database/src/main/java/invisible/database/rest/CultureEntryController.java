@@ -28,7 +28,7 @@ import java.util.Optional;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/entry")
+@RequestMapping("/entry")
 public class CultureEntryController {
 
   private final CultureEntryService entryService;
