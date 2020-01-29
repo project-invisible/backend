@@ -24,7 +24,7 @@ import java.util.List;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/feedback")
+@RequestMapping("/feedback")
 public class FeedbackController {
 
   private final FeedbackService feedbackService;

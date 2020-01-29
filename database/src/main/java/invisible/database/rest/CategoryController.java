@@ -25,7 +25,7 @@ import invisible.database.service.CategoryService;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/criteria")
+@RequestMapping("/criteria")
 public class CategoryController {
 
   private final CategoryService categoryService;

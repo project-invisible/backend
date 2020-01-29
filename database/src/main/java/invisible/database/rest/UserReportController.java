@@ -24,7 +24,7 @@ import java.util.List;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/userReport")
+@RequestMapping("/userReport")
 public class UserReportController {
 
   private final String USER_REPORT_SEQUENCE = "user_report_sequence";

@@ -24,7 +24,7 @@ import java.util.List;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/ratingReport")
+@RequestMapping("/ratingReport")
 public class RatingReportController {
 
   private final RatingReportService ratingReportService;

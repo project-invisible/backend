@@ -29,7 +29,7 @@ import java.util.Optional;
  * <p/>
  */
 @RestController
-@RequestMapping("/db/poi")
+@RequestMapping("/poi")
 public class PointOfInterestController {
 
   private final PointOfInterestService pointOfInterestService;
