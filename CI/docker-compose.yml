@@ -12,15 +12,18 @@ volumes:
 services:
   service-discovery:
     build: ../service-discovery
-    ports:
-      - 8761:8761
     networks:
       - network-back
       - network-front
   database:
     build: ../database
-    ports:
-    - 8182:8182
     networks:
       - network-front
       - network-back
+  web:
+    build: ../web
+    ports:
+      - 8083:8083
+    networks:
+      - network-back
+      - network-front
