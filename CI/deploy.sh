@@ -15,7 +15,7 @@ if [ $TRAVIS_BRANCH == 'master' ] ; then
   docker push invisible/database
   docker push invisible/service-discovery
 
-  scp -o StrictHostKeyChecking=no docker-compose.yml $travis@$invisible.f4.htw-berlin.de:~
+  scp -o StrictHostKeyChecking=no docker-compose.yml travis@invisible.f4.htw-berlin.de:~
   
   echo "+++++ stopping docker containers"
   docker-compose -f docker-compose.yml down
